@@ -46,7 +46,7 @@
     </head>
 
     <body>
-        <canvas id="canvas" height="320" width="320">how can you use the internet?</canvas>
+        <canvas id="canvas" height="1000" width="1000">how can you use the internet?</canvas>
 
         <div class="label">Score: <span id="score">0</span></div>
 
@@ -67,6 +67,10 @@
   **/
             (function(window) {
 
+                var XSIZE=990;
+                var YSIZE=990;
+                var EPSILON=5;
+
                 var ctx;
 
                 var document = window.document;
@@ -78,7 +82,7 @@
                 var mouse = {x: -100, y: -100};
 
                 // our prey we want to hunt
-                var prey = {x: Math.random() * 310, y: Math.random() * 310};
+                var prey = {x: Math.random() * XSIZE, y: Math.random() * YSIZE};
 
                 // cache 2*PI for arc()
                 var pi2 = Math.PI * 2;
@@ -115,16 +119,16 @@
 
                     this.move = function() {
 
-                        if (this.x > 315) {
-                            this.x = 315;
+                        if (this.x > XSIZE+EPSILON) {
+                            this.x = XSIZE+EPSILON;
                             this.xsee = -this.xsee;
-                        } else if (this.x < 5) {
-                            this.x = 5;
+                        } else if (this.x < EPSILON) {
+                            this.x = EPSILON;
                             this.xsee = -this.xsee;
                         }
 
-                        if (this.y > 315) {
-                            this.y = 315;
+                        if (this.y > YSIZE+EPSILON) {
+                            this.y = YSIZE+EPSILON;
                             this.ysee = -this.ysee;
                         } else if (this.y < 5) {
                             this.y = 5;
@@ -152,8 +156,8 @@
                     var x, y;
 
                     do {
-                        x = Math.random() * 315;
-                        y = Math.random() * 315;
+                        x = Math.random() * (XSIZE+EPSILON);
+                        y = Math.random() * (YSIZE+EPSILON);
                     } while (prey.x <= x + 35 && x <= prey.x + 55 && prey.y <= y + 35 && y <= prey.y + 55);
 
                     balls.push(new Ball(x, y, Math.random() * 5.5 - 2.75, Math.random() * 5.5 - 2.75));
@@ -167,7 +171,7 @@
                 function clock() {
 
                     // global clear is faster for many balls
-                    ctx.clearRect(0, 0, 320, 320);
+                    ctx.clearRect(0, 0, XSIZE+2*EPSILON, YSIZE+2*EPSILON);
 
                     ctx.fillStyle = "#c00";
                     ctx.fillRect(prey.x, prey.y, 20, 20);
@@ -260,7 +264,7 @@
                     /////////////
 
                     if (prey.x <= mouse.x + 10 && mouse.x <= prey.x + 30 && prey.y <= mouse.y + 10 && mouse.y <= prey.y + 30) {
-                        prey = {x: Math.random() * 300, y: Math.random() * 300};
+                        prey = {x: Math.random() * (XSIZE-2*EPSILON), y: Math.random() * (YSIZE-2*EPSILON)};
                         createBall();
                         
                         var now = Date.now();
